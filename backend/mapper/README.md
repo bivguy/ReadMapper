@@ -25,8 +25,6 @@ To use your own reference and read files, edit the variables at the top of the M
 - TRUTH = io/inputs/readGroundTruth/{your_ground_truth.txt}
 - OUTPUT = io/outputs/{output.sam}
 
-To adjust the number of cores used (for example, like 128 if in NOTS), then change the variable num_processes on line 125 to the appropriate number of cores
-
 ### Make Commands
 
 below is a description of the various different make commands available for this program

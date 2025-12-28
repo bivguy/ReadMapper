@@ -1,0 +1,5 @@
+io/inputs/readGroundTruth/challenging_ground_truth.txt
+io/inputs/reads/challenging_dataset_1.fastq
+io/inputs/reads/challenging_dataset_2.fastq
+io/inputs/ref/short_reads_reference_genome.fasta
+io/outputs/SAMOutputFile.SAM

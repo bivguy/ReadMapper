@@ -1,6 +1,3 @@
-# COMP 416 Genome Group Name: mmm
-Group Members: Kyle Zeng (Kzz1), Supanat Khaodhiar (sk186), Ariaan Ghatate (ag201), Bivan Shrestha (bs81)
-
 ## Overview
 
 This project implements a genome mapper that aligns paired-end short reads to a reference genome and outputs results in SAM format. The Makefile provides several convenient commands for running and testing the program without typing long command-line arguments.

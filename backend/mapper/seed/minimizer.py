@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 
-from hashing.hash import Hash
+from ..hashing.hash import Hash
 
 
 class Minimizer:

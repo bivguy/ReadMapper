@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
-from models.readMapper import ReadMapperInput, ReadMapperOutput
+from ..models.readMapper import ReadMapperInput, ReadMapperOutput
 from typing import IO, List
-from index.solutionIndex import SolutionIndexBuilder, MetricAccumulator, Metrics
-from mmm_parser.parser import Parser 
-from mmm_parser.readParser import ReadParser
-from models.read import Read
-from models.sam import SAM, SAMInput
-from index.build_index import ReferenceIndexBuilder
+from ..index.solutionIndex import SolutionIndexBuilder, MetricAccumulator, Metrics
+from ..mmm_parser.parser import Parser 
+from ..mmm_parser.readParser import ReadParser
+from ..models.read import Read
+from ..models.sam import SAM, SAMInput
+from ..index.build_index import ReferenceIndexBuilder
 from multiprocessing import Pool
-from parallelization.batch_reads import process_read_pair_batch, _init_worker
+from ..parallelization.batch_reads import process_read_pair_batch, _init_worker
 
 
 class AReadMapper(ABC):
@@ -28,10 +28,16 @@ class ReadMapper(AReadMapper):
         # Assume the files need to be opened here 
         outputFileName: str = "io/outputs/SAMOutputFile.SAM"
         outputFile: IO = open(outputFileName, "w")
+        samWriter : SAM = SAM(  # create samOutput
+            eferenceName=referenceStringHeader, 
+            referenceSize = len(referenceString), 
+            outputFile=outputFile)
+
 
         readFrontFile : IO = open(inputData.readsOne, "r")
         readBackFile : IO = open(inputData.readsTwo, "r")
         
+        # reference file handling
         referenceFile : IO = open(inputData.reference, "r")
         referenceStringHeaderLine = referenceFile.readline().strip('\n') # Skip header
         referenceStringHeader = referenceStringHeaderLine.split()[0][1:]
@@ -48,9 +54,7 @@ class ReadMapper(AReadMapper):
             readSolutionFile = None
             accumulator = None
 
-        # create samOutput
-        samWriter : SAM = SAM(referenceName=referenceStringHeader, referenceSize = len(referenceString), outputFile=outputFile)
-
+       
         # create parser
         parserFront : Parser = Parser(readFile=readFrontFile, referenceFile=None)
         parserBack : Parser = Parser(readFile=readBackFile, referenceFile=None)

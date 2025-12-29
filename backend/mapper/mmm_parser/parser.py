@@ -1,6 +1,6 @@
-from constants.constants import KMERSIZE
+from ..constants.constants import KMERSIZE
 from typing import IO
-from models.read import Read
+from ..models.read import Read
 # from ..models.read import Read
 
 

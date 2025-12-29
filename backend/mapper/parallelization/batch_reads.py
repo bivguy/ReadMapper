@@ -1,8 +1,8 @@
-from extend.extender import Extender, Alignment
-from seed.minimizer import Minimizer
-from models.read import Read
+from ..extend.extender import Extender, Alignment
+from ..seed.minimizer import Minimizer
+from ..models.read import Read
 from typing import Tuple, List
-from constants.constants import KMERSIZE, WINDOWSIZE
+from ..constants.constants import KMERSIZE, WINDOWSIZE
 
 _REFERENCE_INDEX : dict
 _REFERENCE_STRING : str

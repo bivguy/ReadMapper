@@ -1,6 +1,6 @@
-from mmm_parser.parser import Parser
-from models.read import FullRead
-from models.read import Read
+from ..mmm_parser.parser import Parser
+from ..models.read import FullRead
+from ..models.read import Read
 from typing import List
 
 

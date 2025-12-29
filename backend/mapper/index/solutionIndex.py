@@ -1,7 +1,7 @@
 from typing import IO, List
 
 from dataclasses import dataclass, field
-from extend.extender import Alignment
+from ..extend.extender import Alignment
 
 
 @dataclass

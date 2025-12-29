@@ -1,4 +1,4 @@
-from seed.minimizer import Minimizer
+from ..seed.minimizer import Minimizer
 
 
 class ReferenceIndexBuilder:

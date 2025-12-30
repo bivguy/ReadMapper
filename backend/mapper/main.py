@@ -5,15 +5,15 @@ Handles pipeline and CLI
 
 import argparse
 from multiprocessing import Pool, cpu_count
-from .parallelization.batch_reads import process_read_pair_batch, _init_worker
-from .index.build_index import ReferenceIndexBuilder
-from .constants.constants import KMERSIZE, WINDOWSIZE
-from .mmm_parser.parser import Parser 
-from .mmm_parser.readParser import ReadParser
-from .models.read import Read
-from .models.sam import SAM, SAMInput
+from parallelization.batch_reads import process_read_pair_batch, _init_worker
+from index.build_index import ReferenceIndexBuilder
+from constants.constants import KMERSIZE, WINDOWSIZE
+from mmm_parser.parser import Parser 
+from mmm_parser.readParser import ReadParser
+from models.read import Read
+from models.sam import SAM, SAMInput
 from typing import IO, List
-from .index.solutionIndex import SolutionIndexBuilder, MetricAccumulator, Metrics
+from index.solutionIndex import SolutionIndexBuilder, MetricAccumulator, Metrics
 import time
 # import tracemalloc
 import psutil

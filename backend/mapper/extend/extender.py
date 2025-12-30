@@ -126,7 +126,7 @@ class Extender:
             q_seq = rc(read)
 
         # 3) Call DP
-        res = self._banded_semiglobal_memory_optimized(q_seq, t_seq, diag_est_local=diag, band=15)
+        res = self._banded_semiglobal(q_seq, t_seq, diag_est_local=diag, band=15)
         if not res:
             return invalidAlignment
         
@@ -147,9 +147,6 @@ class Extender:
 
         endTime = time.perf_counter()
         elapsedTime = endTime - startTime
-
-        print(f"The 'extend' function part took {elapsedTime:.4f} seconds to execute.")
-
 
         return Alignment(
             readId=readId,

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from ..models.readMapper import ReadMapperInput, ReadMapperOutput
 from typing import IO, List
+import io
 from ..index.solutionIndex import SolutionIndexBuilder, MetricAccumulator, Metrics
 from ..mmm_parser.parser import Parser 
 from ..mmm_parser.readParser import ReadParser
@@ -20,29 +21,31 @@ class ReadMapper(AReadMapper):
     def __init__(self):
         pass
 
-    def mapReads(inputData: ReadMapperInput) -> ReadMapperOutput:
+    def mapReads(self, inputData: ReadMapperInput) -> ReadMapperOutput:
         # constants
         k = inputData.kmerSize  # k-mer size
         w = inputData.windowSize  # window size
 
         # Assume the files need to be opened here 
-        outputFileName: str = "io/outputs/SAMOutputFile.SAM"
-        outputFile: IO = open(outputFileName, "w")
-        samWriter : SAM = SAM(  # create samOutput
-            eferenceName=referenceStringHeader, 
-            referenceSize = len(referenceString), 
-            outputFile=outputFile)
+        outputFile: IO = open(inputData.outputLocation, "w")
 
-
-        readFrontFile : IO = open(inputData.readsOne, "r")
-        readBackFile : IO = open(inputData.readsTwo, "r")
-        
         # reference file handling
-        referenceFile : IO = open(inputData.reference, "r")
+        referenceFile : IO = io.TextIOWrapper(inputData.referenceGenome, encoding='utf-8')
+
         referenceStringHeaderLine = referenceFile.readline().strip('\n') # Skip header
         referenceStringHeader = referenceStringHeaderLine.split()[0][1:]
         referenceString = "".join(line.strip() for line in referenceFile)
         referenceFile.close()
+        inputData.referenceGenome.close()
+
+        samWriter : SAM = SAM(  # create samOutput
+            referenceName=referenceStringHeader, 
+            referenceSize = len(referenceString), 
+            outputFile=outputFile)
+
+
+        readFrontFile : IO = io.TextIOWrapper(inputData.readsOne, encoding='utf-8')
+        readBackFile : IO = io.TextIOWrapper(inputData.readsTwo, encoding='utf-8')
 
         # create reference solution map and accumulator for metrics if ground truth is provided
         solutionIndexBuilder : SolutionIndexBuilder = SolutionIndexBuilder()
@@ -60,11 +63,8 @@ class ReadMapper(AReadMapper):
         parserBack : Parser = Parser(readFile=readBackFile, referenceFile=None)
 
         readParser : ReadParser = ReadParser(parserFront, parserBack)
-
-        # reads : List[FullRead] = readParser.parseAllReads()
         readPairs : List[List[Read]] = readParser.parseAllReadPairs()
 
-        referenceString : str = parserFront.getReferenceString()
         # Build minimizer index from reference
         builder : ReferenceIndexBuilder = ReferenceIndexBuilder(referenceString, k=k, w=w)
         referenceIndex : dict = builder.build_index()
@@ -128,5 +128,9 @@ class ReadMapper(AReadMapper):
             samOutput=outputFile,
             numberOfMappedReads= mappedReads
         )
+
+        outputFile.close()
+        readFrontFile.close()
+        readBackFile.close()
 
         return output

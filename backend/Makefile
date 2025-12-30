@@ -1,8 +1,9 @@
 # Makefile for genome mapper
 .PHONY: build clean
 
-TOPDIRINPUTS = io/inputs/
-TOPDIROUTPUTS = io/outputs/
+TOPLEVELDIR = mapper/
+TOPDIRINPUTS = mapper/io/inputs/
+TOPDIROUTPUTS = mapper/io/outputs/
 
 # Default test files
 # REF = io/inputs/ref/short_reads_reference_genome.fasta
@@ -25,11 +26,11 @@ FINALOUTPUT = io/outputs/Final_SAMOutputFile.SAM
 # Default run without memory tracking
 run:
 	touch $(OUTPUT)
-	python3 main.py -r $(REF) -1 $(READS1) -2 $(READS2) --truth $(TRUTH) -o $(OUTPUT)
+	python3 $(TOPLEVELDIR)main.py -r $(REF) -1 $(READS1) -2 $(READS2) --truth $(TRUTH) -o $(OUTPUT)
 
 run-final:
 	touch $(FINALOUTPUT)
-	python3 main.py -r $(FINALREF) -1 $(FINALREADS1) -2 $(FINALREADS2) --truth $(FINALTRUTH) -o $(FINALOUTPUT)
+	python3 $(TOPLEVELDIR)main.py -r $(FINALREF) -1 $(FINALREADS1) -2 $(FINALREADS2) --truth $(FINALTRUTH) -o $(FINALOUTPUT)
 
 # Run with memory tracking
 run-mem:

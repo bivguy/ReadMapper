@@ -28,9 +28,6 @@ class Parser:
 
         return ''.join(res)
 
-    # def getReferenceString(self) -> str:
-    #     return "".join(line.strip() for line in self.referenceFile)
-
     # TODO: handle both cases of the reads
     def parseNextRead(self) -> Read:
         identifier = ""

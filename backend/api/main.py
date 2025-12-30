@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, Form
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Annotated
 from mapper.readMapper.readMapper import ReadMapper, AReadMapper
@@ -23,13 +24,28 @@ async def mapReads(
     fastOne: UploadFile,
     fastTwo: UploadFile,
     referenceGenome: UploadFile
-    # apiInput: Annotated[ReadMapperApiInput, Form()]
     ):
+    outputFileName : str = "SAMOutputFile.SAM"
+    outputFolderLocation: str = "mapper/io/outputs/"
+    outputFileLocation : str = outputFolderLocation + outputFileName
     readMapperInput = ReadMapperInput(
         readsOne        = fastOne.file,
         readsTwo        = fastTwo.file,
-        referenceGenome = referenceGenome.file
-    )
+        referenceGenome = referenceGenome.file,
+        outputLocation  = outputFileLocation,
+        kmerSize=15,
+        windowSize=30,
+    ) 
 
-    ReadMapperOutput = readMapper.mapReads(readMapperInput)
-    return ReadMapperOutput
+    readMapperOutput : ReadMapperOutput = readMapper.mapReads(readMapperInput)
+
+    headers = {
+        "Mapped-Reads-Count": str(readMapperOutput.numberOfMappedReads),
+        "Access-Control-Expose-Headers": "Mapped-Reads-Count" 
+    }
+
+    return FileResponse(
+        path=outputFileLocation,
+        filename=outputFileName,
+        headers = headers
+    )

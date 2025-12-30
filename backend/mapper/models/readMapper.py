@@ -8,6 +8,8 @@ class ReadMapperInput:
     readsTwo: IO 
     referenceGenome: IO 
 
+    outputLocation: str
+
     # optional fields 
     groundTruth: IO = None
     kmerSize: int = 15 
